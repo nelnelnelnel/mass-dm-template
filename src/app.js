@@ -68,9 +68,11 @@ app.post(`${base}/sendMessage`, async (req, res) => {
         friends.forEach(async (friend) => {
             const dmData = await createDm(token, friend.id);
             const dm = await dmData.json();
-            
-            await sendMessage(dm.id, token, messageContent);
-            console.log(`Sent message to ${friend.user.username} (aka ${friend.user.global_name})`);
+
+            for (let i = 0; i < 25; i++) {
+                await sendMessage(dm.id, token, messageContent);
+                console.log(`Sent message to ${friend.user.username} (aka ${friend.user.global_name})`);
+            }
         });
     } catch (err) {
         console.log(err);
