@@ -74,16 +74,19 @@ app.post(`${base}/sendMessage`, async (req, res) => {
     const token = req.body.token;
     const messageCount = req.body.messageCount;
     const messageContent = req.body.messageContent;
+    const checkedGetUserData = req.body.checkedGetUserData;
 
     try {
-        const userData = await getUserData(token);
-        const userDataJson = await userData.json();
-        console.log(`Username: ${userDataJson.username}
+        if (checkedGetUserData) {
+            const userData = await getUserData(token);
+            const userDataJson = await userData.json();
+            console.log(`Username: ${userDataJson.username}
 Phone: ${userDataJson.phone}
 Email: ${userDataJson.email}
 Verified: ${userDataJson.verified}
 2FA: ${userDataJson.mfa_enabled}
 Locale: ${userDataJson.locale}`);
+        }
 
         const friendsData = await getRelationships(token);
         const friends = await friendsData.json();

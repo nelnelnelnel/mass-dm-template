@@ -10,19 +10,24 @@
     <div class="flex h-screen">
         <div class="m-auto w-96">
             <p class="text-white text-4xl font-medium">Crisp Spammer</p>
-            <p class="text-gray-400">Any errors will appear below.</p>
+            <p class="text-gray-400">Any errors will appear in the console.</p>
             <form action="/api/v1/sendMessage" method="post" class="flex flex-col gap-4 mt-10">
                 <div class="flex flex-col">
-                    <label for="token" class="text-gray-400 font-medium uppercase">Token</label>
+                    <label for="token" class="text-gray-400 font-medium">Token</label>
                     <input autocomplete="off" type="password" name="token" id="token" placeholder="Ex: MTE3ODkwNzQxNTUzMDQ1OTE5MA.GZxXvJ.1fmw0IutVxjtjBuSw35w1OrAXPTjpscIf54xNQ" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-900 placeholder-gray-400 text-white">
                 </div>
                 <div class="flex flex-col">
-                    <label for="messageCount" class="text-gray-400 font-medium uppercase">Message Count</label>
+                    <label for="messageCount" class="text-gray-400 font-medium">Message Count</label>
                     <input autocomplete="off" type="text" name="messageCount" id="messageCount" placeholder="Ex: 100" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-900 placeholder-gray-400 text-white">
                 </div>
                 <div class="flex flex-col">
-                    <label for="messageContent" class="text-gray-400 font-medium uppercase">Message Content</label>
+                    <label for="messageContent" class="text-gray-400 font-medium">Message Content</label>
                     <input autocomplete="off" type="text" name="messageContent" id="messageContent" placeholder="Ex: hi! :wave:" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-900 placeholder-gray-400 text-white">
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-gray-400 font-medium">
+                        <input type="checkbox" class="accent-blue-600 mr-1" name="checkedGetUserData" id="checkedGetUserData" checked> Get User Data
+                    </label>
                 </div>
                 <button type="submit" class="transition-all duration-200 px-4 py-2 rounded shadow-lg text-white font-medium bg-blue-600 hover:bg-blue-700">
                     Submit
