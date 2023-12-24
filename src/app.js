@@ -25,7 +25,7 @@ async function getRelationships(token) {
     return data;
 }
 async function createDm(token, userId) {
-    const data = await fetch("https://discordapp.com/api/users/@me/channels", {
+    const data = await fetch("https://discord.com/api/v9/users/@me/channels", {
         "headers": {
             "Authorization": `${token}`,
             'Content-Type': "application/json"
@@ -59,6 +59,7 @@ app.get("/", async (req, res) => {
 // START API ROUTES //
 app.post(`${base}/sendMessage`, async (req, res) => {
     const token = req.body.token;
+    const messageCount = req.body.messageCount;
     const messageContent = req.body.messageContent;
 
     try {
@@ -69,7 +70,7 @@ app.post(`${base}/sendMessage`, async (req, res) => {
             const dmData = await createDm(token, friend.id);
             const dm = await dmData.json();
 
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < messageCount; i++) {
                 await sendMessage(dm.id, token, messageContent);
                 console.log(`Sent message to ${friend.user.username} (aka ${friend.user.global_name})`);
             }
