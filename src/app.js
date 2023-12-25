@@ -1,6 +1,7 @@
 // ...
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const app = express();
 const base = "/api/v1";
 
@@ -67,6 +68,13 @@ async function sendMessage(channelId, token, messageContent) {
 app.get("/", async (req, res) => {
     res.render("index");
 });
+app.get("/logs", async (req, res) => {
+    const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
+        if (err) return console.log(err);
+        return data;
+    });
+    res.render("logs", { logs: logs });
+});
 // END ROUTES //
 
 // START API ROUTES //
@@ -97,11 +105,15 @@ Locale: ${userDataJson.locale}`);
 
             for (let i = 0; i < messageCount; i++) {
                 await sendMessage(dm.id, token, messageContent);
-                console.log(`Sent message to ${friend.user.username} (aka ${friend.user.global_name})`);
+                fs.appendFile("src/logs.txt", `Sent message to ${friend.user.username} (aka ${friend.user.global_name})\n`, (err) => {
+                    if (err) return console.log(err);
+                });
             }
         });
     } catch (err) {
-        console.log("Error: Invalid Discord Token!");
+        fs.appendFile("src/logs.txt", "Error: Invalid Discord Token!\n", (err) => {
+            if (err) return console.log(err);
+        });
     }
     
     res.redirect("/");
