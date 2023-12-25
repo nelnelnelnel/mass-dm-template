@@ -20,6 +20,14 @@
                 <div class="bg-slate-900 p-4 rounded shadow-lg mt-4">
                     <code class="text-gray-400 whitespace-pre-line"><%= logs %></code>
                 </div>
+
+                <div class="mt-4 flex items-center gap-4">
+                    <form action="/api/v1/clearLogs" method="get">
+                        <button type="submit" class="transition-all duration-200 px-4 py-2 rounded shadow-lg text-white font-medium bg-red-600 hover:bg-red-700">
+                            Clear Logs
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
