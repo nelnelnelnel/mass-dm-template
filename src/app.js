@@ -4,6 +4,10 @@ const path = require("path");
 const fs = require("fs");
 const app = express();
 const base = "/api/v1";
+if (typeof localStorage === "undefined" || localStorage === null) {
+    var LocalStorage = require("node-localstorage").LocalStorage;
+    localStorage = new LocalStorage("./scratch");
+}
 
 // app stuff idfk
 app.use(express.urlencoded({ extended: true }));
@@ -68,6 +72,15 @@ async function sendMessage(channelId, token, messageContent) {
 app.get("/", async (req, res) => {
     res.render("index");
 });
+app.get("/user", async (req, res) => {
+    const token = localStorage.getItem("token").toString();
+    const userData = await getUserData(token);
+    const userDataJson = await userData.json();
+    res.render("user", { userDataJson: userDataJson });
+});
+app.get("/spammer", async (req, res) => {
+    res.render("spammer");
+});
 app.get("/logs", async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
         if (err) return console.log(err);
@@ -78,21 +91,18 @@ app.get("/logs", async (req, res) => {
 // END ROUTES //
 
 // START API ROUTES //
-app.post(`${base}/sendMessage`, async (req, res) => {
+app.post(`${base}/saveTokenToLocal`, async (req, res) => {
     const token = req.body.token;
+    localStorage.setItem("token", token);
+
+    res.redirect("/user");
+});
+app.post(`${base}/spamDaNegro`, async (req, res) => {
+    const token = localStorage.getItem("token").toString();
     const messageCount = req.body.messageCount;
     const messageContent = req.body.messageContent;
-    const checkedGetUserData = req.body.checkedGetUserData;
 
     try {
-        if (checkedGetUserData) {
-            const userData = await getUserData(token);
-            const userDataJson = await userData.json();
-            fs.appendFile("src/logs.txt", `Username: ${userDataJson.username}\nPhone: ${userDataJson.phone}\nEmail: ${userDataJson.email}\nVerified: ${userDataJson.verified}\n2FA: ${userDataJson.mfa_enabled}\nLocale: ${userDataJson.locale}\n`, (err) => {
-                if (err) return console.log(err);
-            });
-        }
-
         const friendsData = await getRelationships(token);
         const friends = await friendsData.json();
     
@@ -108,12 +118,12 @@ app.post(`${base}/sendMessage`, async (req, res) => {
             }
         });
     } catch (err) {
-        fs.appendFile("src/logs.txt", "Error: Invalid Discord Token!\n", (err) => {
+        fs.appendFile("src/logs.txt", `${err}\n`, (err) => {
             if (err) return console.log(err);
         });
     }
     
-    res.redirect("/");
+    res.redirect("/spammer");
 });
 app.get(`${base}/clearLogs`, async (req, res) => {
     fs.writeFile("src/logs.txt", "", (err) => {
