@@ -24,6 +24,7 @@ app.get("/user", async (req, res) => {
     const token = localStorage.getItem("token").toString();
     const userData = await getUserData(token);
     const userDataJson = await userData.json();
+
     res.render("user", { userDataJson: userDataJson });
 });
 app.get("/spammer", async (req, res) => {
@@ -34,7 +35,13 @@ app.get("/logs", async (req, res) => {
         if (err) return console.log(err);
         return data;
     });
+    
     res.render("logs", { logs: logs });
+});
+app.get("/logout", async (req, res) => {
+    localStorage.removeItem("token");
+    
+    res.redirect("/");
 });
 // END ROUTES //
 
