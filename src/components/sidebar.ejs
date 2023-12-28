@@ -1,23 +1,23 @@
-<aside class="flex-col top-0 left-0 w-80 h-screen">
+<aside class="fixed flex-col top-0 left-0 w-80 h-screen">
     <div class="overflow-y-auto py-5 px-3 h-full bg-slate-900 shadow">
         <ul class="space-y-2">
             <li>
-                <a href="/user" class="transition-all duration-200 flex items-center p-2 text-gray-400 rounded hover:bg-slate-800/[.5] hover:text-white">
+                <a href="/user" class="transition-all duration-200 flex items-center p-2 rounded <%= url === "/user" ? "shadow-lg bg-slate-800/[.5] text-white" : "hover:shadow-lg hover:bg-slate-800/[.5] text-gray-400 hover:text-white" %>">
                     <span>User Information</span>
                 </a>
             </li>
             <li>
-                <a href="/spammer" class="transition-all duration-200 flex items-center p-2 text-gray-400 rounded hover:bg-slate-800/[.5] hover:text-white">
+                <a href="/spammer" class="transition-all duration-200 flex items-center p-2 rounded <%= url === "/spammer" ? "shadow-lg bg-slate-800/[.5] text-white" : "hover:shadow-lg hover:bg-slate-800/[.5] text-gray-400 hover:text-white" %>">
                     <span>Spammer</span>
                 </a>
             </li>
             <li>
-                <a href="/logs" class="transition-all duration-200 flex items-center p-2 text-gray-400 rounded hover:bg-slate-800/[.5] hover:text-white">
+                <a href="/logs" class="transition-all duration-200 flex items-center p-2 rounded <%= url === "/logs" ? "shadow-lg bg-slate-800/[.5] text-white" : "hover:shadow-lg hover:bg-slate-800/[.5] text-gray-400 hover:text-white" %>">
                     <span>Logs</span>
                 </a>
             </li>
             <li>
-                <a href="/logout" class="transition-all duration-200 flex items-center p-2 text-red-600 rounded hover:bg-slate-800/[.5] hover:text-red-600">
+                <a href="/logout" class="transition-all duration-200 flex items-center p-2 rounded text-red-600 hover:shadow-lg hover:bg-slate-800/[.5] hover:text-red-600">
                     <span>Logout</span>
                 </a>
             </li>

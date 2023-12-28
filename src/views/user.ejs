@@ -12,18 +12,31 @@
         <%- include("../components/sidebar.ejs"); %>
 
         <!-- content -->
-        <div class="p-4">
+        <div class="ml-80 p-4">
             <div class="w-96">
                 <p class="text-white text-4xl font-medium">User Information</p>
                 <p class="text-gray-400">Discord account information on your target</p>
 
-                <div class="bg-slate-900 p-4 rounded shadow-lg mt-4">
-                    <code class="text-gray-400 whitespace-pre-line">Username: <%= userDataJson.username %>
+                <div class="grid grid-cols-1 gap-4 mt-4">
+                    <div class="bg-slate-900 p-4 rounded shadow-lg">
+                        <p class="text-white text-2xl font-medium">User</p>
+                        <code class="text-gray-400 whitespace-pre-line">Username: <%= userDataJson.username %>
 Phone: <%= userDataJson.phone %>
 Email: <%= userDataJson.email %>
 Verified: <%= userDataJson.verified %>
 2FA: <%= userDataJson.mfa_enabled %>
 Locale: <%= userDataJson.locale %></code>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded shadow-lg">
+                        <p class="text-white text-2xl font-medium">Guilds</p>
+                        <code class="text-gray-400 whitespace-pre-line"><% guildsDataJson.forEach(( guild ) => { %><%= guild.name %>
+<% }); %></code>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded shadow-lg">
+                        <p class="text-white text-2xl font-medium">Friends</p>
+                        <code class="text-gray-400 whitespace-pre-line"><% friendsDataJson.forEach(( friend ) => { %><%= friend.user.username %>  (aka <%= friend.user.global_name %>)
+<% }); %></code>
+                    </div>
                 </div>
             </div>
         </div>

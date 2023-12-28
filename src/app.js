@@ -2,9 +2,11 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { getUserData, getRelationships, createDm, sendMessage } = require("./helpers");
+const { getUserData, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
 const app = express();
-const base = "/api/v1";
+const base = "/api/v1"
+
+// ...
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require("node-localstorage").LocalStorage;
     localStorage = new LocalStorage("./scratch");
@@ -25,10 +27,18 @@ app.get("/user", async (req, res) => {
     const userData = await getUserData(token);
     const userDataJson = await userData.json();
 
-    res.render("user", { userDataJson: userDataJson });
+    const guildsData = await getUserGuilds(token);
+    const guildsDataJson = await guildsData.json();
+
+    const friendsData = await getRelationships(token);
+    const friendsDataJson = await friendsData.json();
+
+    if (!userData.ok) return res.redirect("/");
+
+    res.render("user", { userDataJson: userDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`});
 });
 app.get("/spammer", async (req, res) => {
-    res.render("spammer");
+    res.render("spammer", { url: `${req.baseUrl + req.path}` });
 });
 app.get("/logs", async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
@@ -36,7 +46,7 @@ app.get("/logs", async (req, res) => {
         return data;
     });
     
-    res.render("logs", { logs: logs });
+    res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`  });
 });
 app.get("/logout", async (req, res) => {
     localStorage.removeItem("token");
