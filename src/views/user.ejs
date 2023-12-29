@@ -28,6 +28,32 @@ Verified: <%= userDataJson.verified %>
 Locale: <%= userDataJson.locale %></code>
                     </div>
                     <div class="bg-slate-900 p-4 rounded shadow-lg">
+                        <p class="text-white text-2xl font-medium">Billing</p>
+                        <% for (let i = 0; i < userBillingDataJson.length; i++) { %>
+                            <% if (userBillingDataJson[i].type === 1) { %>
+                                <p class="text-white font-medium">Credit Card</p>
+                                <code class="text-gray-400 whitespace-pre-line">Brand: <%= userBillingDataJson[i].brand %>
+Last 4: <%= userBillingDataJson[i].last_4 %>
+Expires: <%= userBillingDataJson[i].expires_month %>/<%= userBillingDataJson[i].expires_year %>
+Name: <%= userBillingDataJson[i].billing_address.name %>
+Address: <%= userBillingDataJson[i].billing_address.line_1 %>
+City: <%= userBillingDataJson[i].billing_address.city %>
+State: <%= userBillingDataJson[i].billing_address.state %>
+Country: <%= userBillingDataJson[i].billing_address.country %>
+ZIP: <%= userBillingDataJson[i].billing_address.postal_code %></code>
+                            <% } else if (userBillingDataJson[i].type === 2) { %>
+                                <p class="text-white font-medium mt-4">PayPal</p>
+                                <code class="text-gray-400 whitespace-pre-line">Email: <%= userBillingDataJson[i].email %>
+Name: <%= userBillingDataJson[i].billing_address.name %>
+Address: <%= userBillingDataJson[i].billing_address.line_1 %>
+City: <%= userBillingDataJson[i].billing_address.city %>
+State: <%= userBillingDataJson[i].billing_address.state %>
+Country: <%= userBillingDataJson[i].billing_address.country %>
+ZIP: <%= userBillingDataJson[i].billing_address.postal_code %></code>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded shadow-lg">
                         <p class="text-white text-2xl font-medium">Guilds</p>
                         <code class="text-gray-400 whitespace-pre-line"><% guildsDataJson.forEach(( guild ) => { %><%= guild.name %>
 <% }); %></code>

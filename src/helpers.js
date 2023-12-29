@@ -12,6 +12,19 @@ async function getUserData(token) {
     });
     return data;
 }
+async function getUserBilling(token) {
+    const data = await fetch(`https://discord.com/api/v9/users/@me/billing/payment-sources`, {
+        "headers": {
+          "Accept": "*/*",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Authorization": `${token}`,
+          "Content-Type": "application/json",
+        },
+        "body": null,
+        "method": "GET"
+    });
+    return data;
+}
 async function getUserGuilds(token) {
     const data = await fetch(`https://discord.com/api/v9/users/@me/guilds`, {
         "headers": {
@@ -66,6 +79,7 @@ async function sendMessage(channelId, token, messageContent) {
 
 module.exports = {
     getUserData,
+    getUserBilling,
     getUserGuilds,
     getRelationships,
     createDm,

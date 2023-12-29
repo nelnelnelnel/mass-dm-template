@@ -2,9 +2,15 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { getUserData, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
+const { getUserData, getUserBilling, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
 const app = express();
-const base = "/api/v1"
+const base = "/api/v1";
+const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
+const memoryData = process.memoryUsage();
+const memory = {
+    total: `${formatMemoryUsage(memoryData.heapTotal)}`,
+    used: `${formatMemoryUsage(memoryData.heapUsed)}`,
+};
 
 // ...
 if (typeof localStorage === "undefined" || localStorage === null) {
@@ -27,6 +33,9 @@ app.get("/user", async (req, res) => {
     const userData = await getUserData(token);
     const userDataJson = await userData.json();
 
+    const userBillingData = await getUserBilling(token);
+    const userBillingDataJson = await userBillingData.json();
+
     const guildsData = await getUserGuilds(token);
     const guildsDataJson = await guildsData.json();
 
@@ -35,10 +44,10 @@ app.get("/user", async (req, res) => {
 
     if (!userData.ok) return res.redirect("/");
 
-    res.render("user", { userDataJson: userDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`});
+    res.render("user", { userDataJson: userDataJson, userBillingDataJson: userBillingDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory });
 });
 app.get("/spammer", async (req, res) => {
-    res.render("spammer", { url: `${req.baseUrl + req.path}` });
+    res.render("spammer", { url: `${req.baseUrl + req.path}`, memory: memory });
 });
 app.get("/logs", async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
@@ -46,7 +55,7 @@ app.get("/logs", async (req, res) => {
         return data;
     });
     
-    res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`  });
+    res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`, memory: memory  });
 });
 app.get("/logout", async (req, res) => {
     localStorage.removeItem("token");
