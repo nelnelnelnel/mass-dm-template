@@ -2,14 +2,23 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 const { getUserData, getUserBilling, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
 const app = express();
 const base = "/api/v1";
-const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
-const memoryData = process.memoryUsage();
+
+// ...
+const bytesToSize = (bytes) => {
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes == 0) return "0 Byte";
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const sizeInUnits = (bytes / Math.pow(1024, i)).toFixed(2);
+    return `${sizeInUnits} ${sizes[i]}`;
+};
 const memory = {
-    total: `${formatMemoryUsage(memoryData.rss)}`,
-    used: `${formatMemoryUsage(memoryData.heapUsed)}`,
+    total: `${bytesToSize(os.totalmem())}`,
+    used: `${bytesToSize(os.freemem())}`,
+    os: `${os.type()}`,
 };
 
 // ...
