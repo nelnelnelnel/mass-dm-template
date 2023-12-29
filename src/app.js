@@ -17,7 +17,7 @@ const bytesToSize = (bytes) => {
 };
 const memory = {
     total: `${bytesToSize(os.totalmem())}`,
-    used: `${bytesToSize(os.freemem())}`,
+    used: `${bytesToSize(process.memoryUsage().heapUsed)}`,
     os: `${os.type()}`,
 };
 
