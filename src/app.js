@@ -8,7 +8,7 @@ const base = "/api/v1";
 const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
 const memoryData = process.memoryUsage();
 const memory = {
-    total: `${formatMemoryUsage(memoryData.heapTotal)}`,
+    total: `${formatMemoryUsage(memoryData.rss)}`,
     used: `${formatMemoryUsage(memoryData.heapUsed)}`,
 };
 
