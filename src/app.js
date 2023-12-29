@@ -3,7 +3,8 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
-const { getUserData, getUserBilling, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
+const tcpp = require("tcp-ping");
+const { getUserData, getUserBilling, getUserPayments, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
 const app = express();
 const base = "/api/v1";
 
@@ -18,8 +19,13 @@ const bytesToSize = (bytes) => {
 const memory = {
     total: `${bytesToSize(os.totalmem())}`,
     used: `${bytesToSize(process.memoryUsage().heapUsed)}`,
-    os: `${os.type()}`,
 };
+
+// ...
+let ping;
+tcpp.ping({ address: "207.244.235.88" }, (err, data) => {
+    ping = `${Math.round(data.avg)}ms`;
+});
 
 // ...
 if (typeof localStorage === "undefined" || localStorage === null) {
@@ -45,6 +51,9 @@ app.get("/user", async (req, res) => {
     const userBillingData = await getUserBilling(token);
     const userBillingDataJson = await userBillingData.json();
 
+    const userPaymentData = await getUserPayments(token);
+    const userPaymentDataJson = await userPaymentData.json();
+
     const guildsData = await getUserGuilds(token);
     const guildsDataJson = await guildsData.json();
 
@@ -53,10 +62,10 @@ app.get("/user", async (req, res) => {
 
     if (!userData.ok) return res.redirect("/");
 
-    res.render("user", { userDataJson: userDataJson, userBillingDataJson: userBillingDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory });
+    res.render("user", { userDataJson: userDataJson, userBillingDataJson: userBillingDataJson, userPaymentDataJson: userPaymentDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
 app.get("/spammer", async (req, res) => {
-    res.render("spammer", { url: `${req.baseUrl + req.path}`, memory: memory });
+    res.render("spammer", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
 app.get("/logs", async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
@@ -64,7 +73,7 @@ app.get("/logs", async (req, res) => {
         return data;
     });
     
-    res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`, memory: memory  });
+    res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
 app.get("/logout", async (req, res) => {
     localStorage.removeItem("token");
