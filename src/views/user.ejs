@@ -28,6 +28,11 @@ Verified: <%= userDataJson.verified %>
 Locale: <%= userDataJson.locale %></code>
                     </div>
                     <div class="bg-slate-900 p-4 rounded shadow-lg">
+                        <p class="text-white text-2xl font-medium">Sessions</p>
+                        <code class="text-gray-400 whitespace-pre-line"><% userSessionsJson.user_sessions.forEach(( session ) => { %><%= session.client_info.os %> | <%= session.client_info.platform %> | <%= session.client_info.location %>
+<% }); %></code>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded shadow-lg">
                         <p class="text-white text-2xl font-medium">Billing</p>
                         <% for (let i = 0; i < userBillingDataJson.length; i++) { %>
                             <% if (userBillingDataJson[i].type === 1) { %>
