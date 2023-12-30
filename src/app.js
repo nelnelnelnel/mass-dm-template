@@ -70,13 +70,31 @@ app.get("/user", checkForToken, async (req, res) => {
     const friendsData = await DiscordAPI.getRelationships(token);
     const friendsDataJson = await friendsData.json();
 
-    res.render("user", { userDataJson: userDataJson, userSessionsJson: userSessionsJson, userBillingDataJson: userBillingDataJson, userPaymentDataJson: userPaymentDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
+    res.render("user", {
+        userDataJson: userDataJson,
+        userSessionsJson: userSessionsJson,
+        userBillingDataJson: userBillingDataJson,
+        userPaymentDataJson: userPaymentDataJson,
+        guildsDataJson: guildsDataJson,
+        friendsDataJson: friendsDataJson,
+        url: `${req.baseUrl + req.path}`,
+        memory: memory,
+        ping: ping
+    });
 });
 app.get("/spammer", checkForToken, async (req, res) => {
-    res.render("spammer", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
+    res.render("spammer", {
+        url: `${req.baseUrl + req.path}`,
+        memory: memory,
+        ping: ping
+    });
 });
 app.get("/misc", checkForToken, async (req, res) => {
-    res.render("misc", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
+    res.render("misc", {
+        url: `${req.baseUrl + req.path}`,
+        memory: memory,
+        ping: ping
+    });
 });
 app.get("/logs", checkForToken, async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
@@ -84,7 +102,12 @@ app.get("/logs", checkForToken, async (req, res) => {
         return data;
     });
     
-    res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
+    res.render("logs", {
+        logs: logs,
+        url: `${req.baseUrl + req.path}`,
+        memory: memory,
+        ping: ping
+    });
 });
 app.get("/logout", checkForToken, async (req, res) => {
     localStorage.removeItem("token");
