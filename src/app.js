@@ -39,11 +39,18 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// ...
+const checkForToken = (req, res, next) => {
+    const token = localStorage.getItem("token");
+    if (!token) return res.redirect("/");
+    next();
+};
+
 // START ROUTES //
 app.get("/", async (req, res) => {
     res.render("index");
 });
-app.get("/user", async (req, res) => {
+app.get("/user", checkForToken, async (req, res) => {
     const token = localStorage.getItem("token").toString();
     const userData = await DiscordAPI.getUserData(token);
     const userDataJson = await userData.json();
@@ -63,17 +70,15 @@ app.get("/user", async (req, res) => {
     const friendsData = await DiscordAPI.getRelationships(token);
     const friendsDataJson = await friendsData.json();
 
-    if (!userData.ok) return res.redirect("/");
-
     res.render("user", { userDataJson: userDataJson, userSessionsJson: userSessionsJson, userBillingDataJson: userBillingDataJson, userPaymentDataJson: userPaymentDataJson, guildsDataJson: guildsDataJson, friendsDataJson: friendsDataJson, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
-app.get("/spammer", async (req, res) => {
+app.get("/spammer", checkForToken, async (req, res) => {
     res.render("spammer", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
-app.get("/misc", async (req, res) => {
+app.get("/misc", checkForToken, async (req, res) => {
     res.render("misc", { url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
-app.get("/logs", async (req, res) => {
+app.get("/logs", checkForToken, async (req, res) => {
     const logs = await fs.readFileSync("src/logs.txt", (err, data) => {
         if (err) return console.log(err);
         return data;
@@ -81,7 +86,7 @@ app.get("/logs", async (req, res) => {
     
     res.render("logs", { logs: logs, url: `${req.baseUrl + req.path}`, memory: memory, ping: ping });
 });
-app.get("/logout", async (req, res) => {
+app.get("/logout", checkForToken, async (req, res) => {
     localStorage.removeItem("token");
     
     res.redirect("/");
