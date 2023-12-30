@@ -10,7 +10,7 @@ const base = "/api/v1";
 
 // ...
 let ping;
-tcpp.ping({ address: "207.244.235.88" }, (err, data) => {
+tcpp.ping({ address: "207.244.235.88", port: "8000" }, (err, data) => {
     ping = `${Math.round(data.avg)}ms`;
 });
 
