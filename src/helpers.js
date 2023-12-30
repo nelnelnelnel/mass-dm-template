@@ -118,7 +118,7 @@ async function patchSettings(token, encodedData) {
 }
 // END HELPER FUNCTIONS //
 
-module.exports = {
+module.exports.DiscordAPI = {
     getUserData,
     getUserSessions,
     getUserBilling,

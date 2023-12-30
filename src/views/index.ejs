@@ -10,14 +10,14 @@
     <script src="https://cdn.tailwindcss.com/"></script>
 </head>
 <body class="flex h-screen bg-slate-950">
-    <div class="m-auto p-4">
-        <div class="w-96">
+    <div class="w-full m-96 p-4">
+        <div class="w-1/2 px-8 py-4 rounded shadow-lg bg-slate-900">
             <p class="text-white text-4xl font-medium">Token Fucker</p>
             <p class="text-gray-400">Please enter the Discord token below.</p>
             <form action="/api/v1/saveTokenToLocal" method="post" class="flex flex-col gap-4 mt-4">
                 <div class="flex flex-col">
                     <label for="token" class="text-gray-400 font-medium">Token</label>
-                    <input autocomplete="off" type="password" name="token" id="token" placeholder="Ex: MTE3ODkwNzQxNTUzMDQ1OTE5MA.GZxXvJ.1fmw0IutVxjtjBuSw35w1OrAXPTjpscIf54xNQ" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-900 placeholder-gray-400 text-white">
+                    <input autocomplete="off" type="password" name="token" id="token" placeholder="Ex: MTE3ODkwNzQxNTUzMDQ1OTE5MA.GZxXvJ.1fmw0IutVxjtjBuSw35w1OrAXPTjpscIf54xNQ" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-800 placeholder-gray-400 text-white">
                 </div>
                 <button type="submit" class="transition-all duration-200 px-4 py-2 rounded shadow-lg text-white font-medium bg-blue-600 hover:bg-blue-700">
                     Login
@@ -25,6 +25,11 @@
             </form>
         </div>
     </div>
+
+    <div class="fixed bottom-0 right-0 z-[999]">
+        <img src="https://cdn3.emoji.gg/emojis/6304-pepe-sipspin.gif" class="-rotate-45" draggable="false">
+    </div>
+    
     <div class="fixed bottom-0">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="190" preserveAspectRatio="xMidYMid" viewBox="0 0 1920 190">
             <g transform="translate(960,195) scale(-1,-1) translate(-960,-195)">

