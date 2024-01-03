@@ -16,15 +16,15 @@
         <%- include("../components/sidebar.ejs"); %>
 
         <!-- content -->
-        <div class="ml-80 p-4">
-            <div class="w-96">
+        <div class="md:ml-80 p-4 w-full">
+            <div class="w-full">
                 <p class="text-white text-4xl font-medium">Spammer</p>
                 <p class="text-gray-400">Does da cool spammy mass dm stuff :3</p>
 
                 <form action="/api/v1/spamDaNegro" method="post" class="flex flex-col gap-4 mt-4">
                     <div class="flex flex-col">
                         <label for="messageCount" class="text-gray-400 font-medium">Message Count</label>
-                        <input autocomplete="off" type="text" name="messageCount" id="messageCount" placeholder="Ex: 100" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-900 placeholder-gray-400 text-white">
+                        <input autocomplete="off" type="number" name="messageCount" id="messageCount" placeholder="Ex: 5" class="px-4 py-2 rounded shadow-lg outline-none border-none bg-slate-900 placeholder-gray-400 text-white">
                     </div>
                     <div class="flex flex-col">
                         <label for="messageContent" class="text-gray-400 font-medium">Message Content</label>
