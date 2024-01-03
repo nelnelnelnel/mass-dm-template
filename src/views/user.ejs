@@ -23,9 +23,16 @@
         <div class="md:ml-80 p-4 w-full">
             <div class="w-full">
                 <p class="text-white text-4xl font-medium">User Information</p>
-                <p class="text-gray-400">Discord account information on your target</p>
+                <p class="text-gray-400 mb-4">Discord account information on your target</p>
 
                 <div class="grid grid-cols-1 gap-4 mt-4">
+                    <div class="bg-slate-900 p-4 rounded shadow-lg">
+                        <div class="flex items-center gap-4">
+                            <a href="https://discord.com/users/<%= userDataJson.id %>" target="_blank" class="transition-all duration-200 px-4 py-2 rounded shadow-lg text-white font-medium bg-blue-600 hover:bg-blue-700">
+                                Open Discord Popup
+                            </a>
+                        </div>
+                    </div>
                     <div class="bg-slate-900 p-4 rounded shadow-lg">
                         <p class="text-white text-2xl font-medium">User</p>
                         <code class="text-gray-400 whitespace-pre-line">Username: <%= userDataJson.username %>
